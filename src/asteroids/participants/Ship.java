@@ -37,8 +37,8 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.closePath();
         outline = poly;
 
-        // Schedule an acceleration in two seconds
-        new ParticipantCountdownTimer(this, "move", 2000);
+        // Schedule an acceleration in two seconds, commented out
+//        new ParticipantCountdownTimer(this, "move", 2000);
     }
 
     /**
@@ -102,11 +102,20 @@ public class Ship extends Participant implements AsteroidDestroyer
     }
 
     /**
-     * Decelerate
+     * Decelerate by SHIP_ACCELERATION
      */
     public void decelerate ()
     {
         accelerate(-SHIP_ACCELERATION);
+    }
+    
+    /**
+     * fire bullets
+     */
+    public void fire()
+    {
+     // TODO need constructor
+        controller.addParticipant(new Bullets(this.getXNose(),this.getYNose(),this.getDirection(),controller));
     }
 
     /**
