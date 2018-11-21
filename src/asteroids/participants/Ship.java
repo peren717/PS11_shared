@@ -102,6 +102,14 @@ public class Ship extends Participant implements AsteroidDestroyer
     }
 
     /**
+     * Decelerate
+     */
+    public void decelerate ()
+    {
+        accelerate(-SHIP_ACCELERATION);
+    }
+
+    /**
      * When a Ship collides with a ShipDestroyer, it expires
      */
     @Override
