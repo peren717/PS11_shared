@@ -1,0 +1,29 @@
+This criterion is linked to a Learning Outcome The turning, thrust, and firing controls work (arrow keys, WASD, space bar) and work smoothly	WIP
+
+Ship accelerates to a maximum speed in the direction it is facing, and gradually slows to a stop if no thrust is applied	DONE
+
+This criterion is linked to a Learning Outcome Asteroids split/disappear (and bullet disappears) when hit by a bullet
+
+Bullets have a maximum range; there are at most eight at a time
+
+Temporary debris appears when something blows up
+
+Large and medium asteroids split into two smaller asteroids when hit. Small asteroids have speeds between slow and fast. Medium asteroids have speeds between slow and medium. Large asteroids are slow. There are four asteroids to start with. Each time a new level is reached (all the asteroids on the screen are destroyed), new large asteroids appear. The number of these large asteroids increases by one from the previous level change.
+
+Correct number of points are given for destroying different sizes of asteroids and alien ships.
+
+Onscreen labels (lives, score, level) update properly
+
+This criterion is linked to a Learning Outcome All sound effects are present.
+
+At level 2, a medium size alien ship appears 5-10 seconds after the level begins. It starts off screen and goes in a direction either left-to-right or right-to-left across the screen. It randomly zig-zags in three directions: either perfectly horizontal, or at a slight angle 1 radian upward or downward from horizontal.
+
+This criterion is linked to a Learning Outcome At level 3 and above, a small alien ship appears instead. The small alien ship zig-zags the same as the medium ship, but moves faster.
+
+This criterion is linked to a Learning Outcome Alien ships fire every few seconds when a ship is present. Medium ship fires randomly; small ship fires within five degrees of the ship.
+
+Alien bullets have a maximum range. Alien ships and alien bullets destroy asteroids and ships and vice versa.
+
+This criterion is linked to a Learning Outcome The alien ships are the same size and shape as in the demo. When an alien ship is destroyed, a new one appears within 5-10 seconds.
+
+The game plays smoothly without crashing
