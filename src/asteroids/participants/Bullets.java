@@ -41,8 +41,10 @@ public class Bullets extends Participant implements AsteroidDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        Participant.expire(this);
-        
+        if (p instanceof Asteroid)
+        {
+            Participant.expire(this);
+        }        
     }
 }
 
