@@ -114,8 +114,7 @@ public class Ship extends Participant implements AsteroidDestroyer
      */
     public void fire()
     {
-     // TODO need constructor
-        controller.addParticipant(new Bullets(this.getXNose(),this.getYNose(),this.getDirection(),controller));
+        controller.addParticipant(new Bullets(this.getXNose(), this.getYNose(), this.getRotation()));
     }
 
     /**
