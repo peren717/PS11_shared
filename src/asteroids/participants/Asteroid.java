@@ -137,18 +137,31 @@ public class Asteroid extends Participant implements ShipDestroyer
     }
 
     /**
-     * When an Asteroid collides with an AsteroidDestroyer, it expires.
+     * When an Asteroid collides with an AsteroidDestroyer, it expires or splits, based on size.
      */
     @Override
     public void collidedWith (Participant p)
     {
         if (p instanceof AsteroidDestroyer)
         {
+            if (this.getSize() == 2)
+            {
+                controller.addParticipant(new Asteroid(0, 1, this.getX(), this.getY(), 6, controller));
+                controller.addParticipant(new Asteroid(0, 1, this.getX(), this.getY(), 6, controller));
+            }
+            else if (this.getSize() == 1)
+            {
+                controller.addParticipant(new Asteroid(0, 0, this.getX(), this.getY(), 8, controller));
+                controller.addParticipant(new Asteroid(0, 0, this.getX(), this.getY(), 8, controller));
+            }
+            
             // Expire the asteroid
             Participant.expire(this);
+            Participant.expire(p);
 
             // Inform the controller
             controller.asteroidDestroyed();
+            
         }
     }
 }
