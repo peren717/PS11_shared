@@ -265,7 +265,7 @@ public class Controller implements KeyListener, ActionListener
         {
             ship.decelerate();
         }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE && ship != null)
+        if (e.getKeyCode() == KeyEvent.VK_SPACE)
         {
             ship.fire();
         }
