@@ -189,6 +189,14 @@ public class Controller implements KeyListener, ActionListener
     }
 
     /**
+     * Return true if there are at least 8 bullets
+     */
+    public boolean HasMaxBullets ()
+    {
+        return this.pstate.countBullets() >= 8;
+    }
+
+    /**
      * This method will be invoked because of button presses and timer events.
      */
     @Override
@@ -265,11 +273,11 @@ public class Controller implements KeyListener, ActionListener
         {
             ship.decelerate();
         }
-        if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship!=null)
+        if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship != null)
         {
             ship.fire();
         }
-        
+
     }
 
     /**
