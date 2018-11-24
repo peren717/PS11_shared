@@ -3,6 +3,7 @@ package asteroids.game;
 import static asteroids.game.Constants.*;
 import java.awt.event.*;
 import java.util.Iterator;
+import java.util.Random;
 import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
@@ -33,7 +34,7 @@ public class Controller implements KeyListener, ActionListener
 
     /** The game display */
     private Display display;
-    
+
     /** Level currently being played **/
     private int level;
 
@@ -53,6 +54,9 @@ public class Controller implements KeyListener, ActionListener
 
         // Record the display object
         display = new Display(this);
+
+        // Initialize level
+        level = 1;
 
         // Bring up the splash screen and start the refresh timer
         splashScreen();
@@ -78,7 +82,7 @@ public class Controller implements KeyListener, ActionListener
         display.setLegend("Asteroids");
 
         // Place four asteroids near the corners of the screen.
-        placeAsteroids();
+        placeAsteroids(level);
     }
 
     /**
@@ -103,31 +107,33 @@ public class Controller implements KeyListener, ActionListener
     }
 
     /**
-     * Places an asteroid near the corners of the screen based on level. Gives it a random velocity, variety, and rotation.
+     * Places an asteroid near the corners of the screen based on level. Gives it a random velocity, variety, and
+     * rotation.
      */
-    private void placeAsteroids ()
+    private void placeAsteroids (int level)
     {
+        int num = level;
         while (num > 0)
         {
             if (num % 4 == 0)
             {
                 addParticipant(new Asteroid(new Random().nextInt(3), 2, 150, 150, 3, this));
-                num --;
+                num--;
             }
             else if (num % 4 == 1)
             {
                 addParticipant(new Asteroid(new Random().nextInt(3), 2, 600, 150, 3, this));
-                num --;
+                num--;
             }
             else if (num % 4 == 2)
             {
                 addParticipant(new Asteroid(new Random().nextInt(3), 2, 150, 600, 3, this));
-                num --;
+                num--;
             }
             else
             {
                 addParticipant(new Asteroid(new Random().nextInt(3), 2, 600, 600, 3, this));
-                num --;
+                num--;
             }
         }
     }
@@ -151,7 +157,7 @@ public class Controller implements KeyListener, ActionListener
         clear();
 
         // Plac asteroids
-        placeAsteroids();
+        placeAsteroids(level);
 
         // Place the ship
         placeShip();
