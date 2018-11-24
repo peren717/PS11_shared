@@ -33,6 +33,9 @@ public class Controller implements KeyListener, ActionListener
 
     /** The game display */
     private Display display;
+    
+    /** Level currently being played **/
+    private int level;
 
     /**
      * Constructs a controller to coordinate the game and screen
@@ -100,11 +103,33 @@ public class Controller implements KeyListener, ActionListener
     }
 
     /**
-     * Places an asteroid near one corner of the screen. Gives it a random velocity and rotation.
+     * Places an asteroid near the corners of the screen based on level. Gives it a random velocity, variety, and rotation.
      */
     private void placeAsteroids ()
     {
-        addParticipant(new Asteroid(0, 2, EDGE_OFFSET, EDGE_OFFSET, 3, this));
+        while (num > 0)
+        {
+            if (num % 4 == 0)
+            {
+                addParticipant(new Asteroid(new Random().nextInt(3), 2, 150, 150, 3, this));
+                num --;
+            }
+            else if (num % 4 == 1)
+            {
+                addParticipant(new Asteroid(new Random().nextInt(3), 2, 600, 150, 3, this));
+                num --;
+            }
+            else if (num % 4 == 2)
+            {
+                addParticipant(new Asteroid(new Random().nextInt(3), 2, 150, 600, 3, this));
+                num --;
+            }
+            else
+            {
+                addParticipant(new Asteroid(new Random().nextInt(3), 2, 600, 600, 3, this));
+                num --;
+            }
+        }
     }
 
     /**
@@ -132,7 +157,7 @@ public class Controller implements KeyListener, ActionListener
         placeShip();
 
         // Reset statistics
-        lives = 1;
+        lives = 3;
 
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
@@ -247,6 +272,11 @@ public class Controller implements KeyListener, ActionListener
             if (lives <= 0)
             {
                 finalScreen();
+            }
+            else if (pstate.countAsteroids() == 0)
+            {
+                placeAsteroids(level + 4);
+                level++;
             }
         }
     }
