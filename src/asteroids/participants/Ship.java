@@ -38,7 +38,7 @@ public class Ship extends Participant implements AsteroidDestroyer
         outline = poly;
 
         // Schedule an acceleration in two seconds, commented out
-//        new ParticipantCountdownTimer(this, "move", 2000);
+        // new ParticipantCountdownTimer(this, "move", 2000);
     }
 
     /**
@@ -108,13 +108,16 @@ public class Ship extends Participant implements AsteroidDestroyer
     {
         accelerate(-SHIP_ACCELERATION);
     }
-    
+
     /**
      * fire bullets
      */
-    public void fire()
+    public void fire ()
     {
-        controller.addParticipant(new Bullets(this.getXNose(), this.getYNose(), this.getRotation()));
+        if (!controller.HasMaxBullets())
+        {
+            controller.addParticipant(new Bullets(this.getXNose(), this.getYNose(), this.getRotation()));
+        }
     }
 
     /**
