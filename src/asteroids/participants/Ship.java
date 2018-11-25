@@ -136,6 +136,8 @@ public class Ship extends Participant implements AsteroidDestroyer
 
             // Tell the controller the ship was destroyed
             controller.shipDestroyed();
+            
+
         }
     }
 

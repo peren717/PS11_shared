@@ -270,6 +270,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         if (e.getSource() instanceof JButton)
         {
             initialScreen();
+            this.playSound("/sounds/John_Cena.wav");
         }
 
         // Time to refresh the screen and deal with keyboard input
