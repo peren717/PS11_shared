@@ -37,6 +37,13 @@ public class Controller implements KeyListener, ActionListener
 
     /** Level currently being played **/
     private int level;
+    
+    /** These are the booleans that indicate ship movement*/
+    private boolean forward;
+    private boolean right;
+    private boolean left;
+    private boolean backward;
+    private boolean fire;
 
     /**
      * Constructs a controller to coordinate the game and screen
@@ -221,7 +228,7 @@ public class Controller implements KeyListener, ActionListener
     /**
      * Return true if there are at least 8 bullets
      */
-    public boolean HasMaxBullets ()
+    public boolean hasMaxBullets ()
     {
         return this.pstate.countBullets() >= 8;
     }
@@ -244,12 +251,34 @@ public class Controller implements KeyListener, ActionListener
         {
             // It may be time to make a game transition
             performTransition();
+            
+            //Move the ship according to which boolean is currently true
+            if (right)
+            {
+                ship.turnRight();
+            }else if (left)
+            {
+                ship.turnLeft();
+            }
+            if (forward)
+            {
+                ship.accelerate();
+            }else if (backward)
+            {
+                ship.decelerate();
+            }
+            if (fire)
+            {
+                ship.fire();
+            }
 
             // Move the participants to their new locations
             pstate.moveParticipants();
 
             // Refresh screen
             display.refresh();
+            
+
         }
     }
 
@@ -294,23 +323,23 @@ public class Controller implements KeyListener, ActionListener
     {
         if ((e.getKeyCode() == KeyEvent.VK_D | e.getKeyCode() == KeyEvent.VK_RIGHT) && ship != null)
         {
-            ship.turnRight();
+            right = true;
         }
         else if ((e.getKeyCode() == KeyEvent.VK_A | e.getKeyCode() == KeyEvent.VK_LEFT) && ship != null)
         {
-            ship.turnLeft();
+            left = true;
         }
         else if ((e.getKeyCode() == KeyEvent.VK_W | e.getKeyCode() == KeyEvent.VK_UP) && ship != null)
         {
-            ship.accelerate();
+            forward = true;
         }
         else if ((e.getKeyCode() == KeyEvent.VK_S | e.getKeyCode() == KeyEvent.VK_DOWN) && ship != null)
         {
-            ship.decelerate();
+            backward = true;
         }
         if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship != null)
         {
-            ship.fire();
+            fire = true;
         }
 
     }
@@ -324,10 +353,31 @@ public class Controller implements KeyListener, ActionListener
     }
 
     /**
-     * These events are ignored.
+     * If a key of interest is released, record that it is up.
      */
     @Override
     public void keyReleased (KeyEvent e)
     {
+        if ((e.getKeyCode() == KeyEvent.VK_D | e.getKeyCode() == KeyEvent.VK_RIGHT) && ship != null)
+        {
+            right = false;
+        }
+        else if ((e.getKeyCode() == KeyEvent.VK_A | e.getKeyCode() == KeyEvent.VK_LEFT) && ship != null)
+        {
+            left = false;
+        }
+        else if ((e.getKeyCode() == KeyEvent.VK_W | e.getKeyCode() == KeyEvent.VK_UP) && ship != null)
+        {
+            forward = false;
+        }
+        else if ((e.getKeyCode() == KeyEvent.VK_S | e.getKeyCode() == KeyEvent.VK_DOWN) && ship != null)
+        {
+            backward = false;
+        }
+        if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship != null)
+        {
+            fire = false;
+        }
     }
+    
 }

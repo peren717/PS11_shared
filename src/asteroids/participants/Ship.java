@@ -114,7 +114,7 @@ public class Ship extends Participant implements AsteroidDestroyer
      */
     public void fire ()
     {
-        if (!controller.HasMaxBullets())
+        if (!controller.hasMaxBullets())
         {
             controller.addParticipant(new Bullets(this.getXNose(), this.getYNose(), this.getRotation()));
         }
