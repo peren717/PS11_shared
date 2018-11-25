@@ -14,20 +14,18 @@ public class AsteroidDebris extends Participant
      */
     public AsteroidDebris (double x, double y, double direction)
     {
-            this.setPosition(x, y);
-            this.setVelocity(1.0, direction);
-            this.outline = new Ellipse2D.Double(0.0, 0.0, 1.0, 1.0);
-            new ParticipantCountdownTimer(this, this, 1000);
-
+        this.setPosition(x, y);
+        this.setVelocity(1.0, direction);
+        this.outline = new Ellipse2D.Double(0.0, 0.0, 1.0, 1.0);
+        new ParticipantCountdownTimer(this, this, 1000);
     }
-    
 
     @Override
     protected Shape getOutline ()
     {
         return outline;
     }
-    
+
     /*
      * At the end of the timer, remove the debris.
      */

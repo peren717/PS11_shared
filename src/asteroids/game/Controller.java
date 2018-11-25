@@ -1,9 +1,18 @@
 package asteroids.game;
 
 import static asteroids.game.Constants.*;
+import java.awt.MouseInfo;
 import java.awt.event.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Random;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
@@ -11,7 +20,7 @@ import asteroids.participants.Ship;
 /**
  * Controls a game of Asteroids.
  */
-public class Controller implements KeyListener, ActionListener
+public class Controller implements KeyListener, ActionListener, MouseListener
 {
     /** The state of all the Participants */
     private ParticipantState pstate;
@@ -38,12 +47,21 @@ public class Controller implements KeyListener, ActionListener
     /** Level currently being played **/
     private int level;
 
-    /** These are the booleans that indicate ship movement */
+    /** Boolean that indicates ship movement */
     private boolean forward;
+    /** Boolean that indicates ship movement */
     private boolean right;
+    /** Boolean that indicates ship movement */
     private boolean left;
+    /** Boolean that indicates ship movement */
     private boolean backward;
+    /** Boolean that indicates ship movement */
     private boolean fire;
+
+    /** Mouse coordinates X */
+    private double mouseX;
+    /** Mouse coordinates Y */
+    private double mouseY;
 
     /**
      * Constructs a controller to coordinate the game and screen
@@ -69,7 +87,6 @@ public class Controller implements KeyListener, ActionListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
-        
     }
 
     /**
@@ -163,13 +180,13 @@ public class Controller implements KeyListener, ActionListener
         // Clear the screen
         clear();
 
-        // Plac asteroids
-        placeAsteroids(4);
+        // Place asteroids
+         placeAsteroids(4);
 
         // Place the ship
         placeShip();
-        
-        //reset movement
+
+        // reset movement
         right = false;
         left = false;
         forward = false;
@@ -182,6 +199,7 @@ public class Controller implements KeyListener, ActionListener
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
         display.addKeyListener(this);
+        display.addMouseListener(this);
 
         // Give focus to the game screen
         display.requestFocusInWindow();
@@ -284,6 +302,14 @@ public class Controller implements KeyListener, ActionListener
                     ship.fire();
                 }
             }
+            mouseY = MouseInfo.getPointerInfo().getLocation().y;
+            mouseX = MouseInfo.getPointerInfo().getLocation().x;
+            if (ship != null)
+            {
+                double dx = mouseX - ship.getX();
+                double dy = mouseY - ship.getY();
+                ship.setRotation(Participant.normalize(Math.atan2(dy, dx)));
+            }
             // Move the participants to their new locations
             pstate.moveParticipants();
 
@@ -352,7 +378,6 @@ public class Controller implements KeyListener, ActionListener
         {
             fire = true;
         }
-
     }
 
     /**
@@ -391,4 +416,96 @@ public class Controller implements KeyListener, ActionListener
         }
     }
 
+    /**
+     * Creates an audio clip from a sound file.
+     */
+    public Clip createClip (String soundFile)
+    {
+        // Opening the sound file this way will work no matter how the
+        // project is exported. The only restriction is that the
+        // sound files must be stored in a package.
+        try (BufferedInputStream sound = new BufferedInputStream(getClass().getResourceAsStream(soundFile)))
+        {
+            // Create and return a Clip that will play a sound file. There are
+            // various reasons that the creation attempt could fail. If it
+            // fails, return null.
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(sound));
+            return clip;
+        }
+        catch (LineUnavailableException e)
+        {
+            return null;
+        }
+        catch (IOException e)
+        {
+            return null;
+        }
+        catch (UnsupportedAudioFileException e)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Play designated sound
+     */
+    public void playSound (String fileName)
+    {
+        Clip sound = createClip(fileName);
+        if (sound.isRunning())
+        {
+            sound.stop();
+        }
+        sound.setFramePosition(0);
+        sound.start();
+    }
+
+    @Override
+    public void mouseClicked (MouseEvent e)
+    {
+    }
+
+    /**
+     * Left pressed to accelerate, right pressed to fire
+     */
+    @Override
+    public void mousePressed (MouseEvent e)
+    {
+        if (e.getButton() == MouseEvent.BUTTON1)
+        {
+            forward = true;
+        }
+        else
+        {
+            fire = true;
+        }
+
+    }
+
+    /**
+     * stop accelerating and firing once button released
+     */
+    @Override
+    public void mouseReleased (MouseEvent e)
+    {
+        if (e.getButton() == MouseEvent.BUTTON1)
+        {
+            forward = false;
+        }
+        else
+        {
+            fire = false;
+        }
+    }
+
+    @Override
+    public void mouseEntered (MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseExited (MouseEvent e)
+    {
+    }
 }

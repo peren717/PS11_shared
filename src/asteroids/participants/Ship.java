@@ -99,6 +99,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void accelerate ()
     {
         accelerate(SHIP_ACCELERATION);
+        controller.playSound("/sounds/thrust.wav");
     }
 
     /**
@@ -107,6 +108,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void decelerate ()
     {
         accelerate(-SHIP_ACCELERATION);
+        controller.playSound("/sounds/thrust.wav");
     }
 
     /**
@@ -117,6 +119,7 @@ public class Ship extends Participant implements AsteroidDestroyer
         if (!controller.hasMaxBullets())
         {
             controller.addParticipant(new Bullets(this.getXNose(), this.getYNose(), this.getRotation()));
+            controller.playSound("/sounds/fire.wav");
         }
     }
 
