@@ -319,6 +319,9 @@ public abstract class Participant
         g.draw(border);
     }
     
+    /**
+     * switch Invulnerability
+     */
     public void setInvulnerability ()
     {
         if (this.isInvulnerable)
@@ -331,6 +334,9 @@ public abstract class Participant
         }
     }
     
+    /**
+     * @return turn if issetInvulnerable
+     */
     public boolean isInvulnerability()
     {
         return this.isInvulnerable;
