@@ -137,8 +137,8 @@ public class Asteroid extends Participant implements ShipDestroyer
     }
 
     /**
-     * When an Asteroid collides with an AsteroidDestroyer, it expires or splits, based on size.
-     * Will also create temporary debris where the destroyed asteroid used to be.
+     * When an Asteroid collides with an AsteroidDestroyer, it expires or splits, based on size. Will also create
+     * temporary debris where the destroyed asteroid used to be.
      */
     @Override
     public void collidedWith (Participant p)
@@ -149,27 +149,34 @@ public class Asteroid extends Participant implements ShipDestroyer
             {
                 controller.addParticipant(new Asteroid(0, 1, this.getX(), this.getY(), 6, controller));
                 controller.addParticipant(new Asteroid(0, 1, this.getX(), this.getY(), 6, controller));
-                controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
-                controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+                controller.addParticipant(
+                        new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+                controller.addParticipant(
+                        new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
             }
             else if (this.getSize() == 1)
             {
                 controller.addParticipant(new Asteroid(0, 0, this.getX(), this.getY(), 8, controller));
                 controller.addParticipant(new Asteroid(0, 0, this.getX(), this.getY(), 8, controller));
-                controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
-                controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+                controller.addParticipant(
+                        new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+                controller.addParticipant(
+                        new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
             }
-            
+
             controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
             controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
-            
+
             // Expire the asteroid
             Participant.expire(this);
-            Participant.expire(p);
+            if (!p.isInvulnerability())
+            {
+                Participant.expire(p);
+            }
 
             // Inform the controller
             controller.asteroidDestroyed();
-            
+
         }
     }
 }

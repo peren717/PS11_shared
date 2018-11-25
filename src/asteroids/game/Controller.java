@@ -64,6 +64,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     /** Mouse coordinates Y */
     private double mouseY;
 
+    /** console command */
+    private String consoleCommand;
+
     /**
      * Constructs a controller to coordinate the game and screen
      */
@@ -217,6 +220,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
         display.addKeyListener(this);
+        display.removeMouseListener(this);
         display.addMouseListener(this);
 
         // Give focus to the game screen
@@ -274,7 +278,14 @@ public class Controller implements KeyListener, ActionListener, MouseListener
      */
     public boolean hasMaxBullets ()
     {
-        return this.pstate.countBullets() >= 8;
+        if (!ship.isInvulnerable)
+        {
+            return this.pstate.countBullets() >= 8;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
@@ -288,7 +299,8 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         if (e.getSource() instanceof JButton)
         {
             initialScreen();
-            this.playSound("/sounds/John_Cena.wav");
+            level = 1;
+            display.setLevel(level);
         }
 
         // Time to refresh the screen and deal with keyboard input
@@ -332,6 +344,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 double dy = mouseY - ship.getY();
                 ship.setRotation(Participant.normalize(Math.atan2(dy, dx)));
             }
+
             // Move the participants to their new locations
             pstate.moveParticipants();
 
@@ -370,6 +383,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             {
                 placeAsteroids(level + 4);
                 level++;
+                display.setLevel(level);
             }
         }
     }
@@ -436,6 +450,27 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             fire = false;
         }
+        if (e.getKeyCode() == KeyEvent.VK_DECIMAL)
+        {
+            consoleCommand = JOptionPane.showInputDialog(null, "", "Console", JOptionPane.DEFAULT_OPTION);
+            // Execute console command
+            if (consoleCommand != null)
+            {
+                if (consoleCommand.equals("whosyourdaddy") && ship != null)
+                {
+                    this.playSound("/sounds/John_Cena.wav");
+                    ship.setInvulnerability();
+                }
+                else if (consoleCommand.equals("add_as") && ship != null)
+                {
+                    addParticipant(new Asteroid(new Random().nextInt(3), 2, 150, 150, 3, this));
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Command invalid: ship is expired");
+                }
+            }
+        }
     }
 
     /**
@@ -472,9 +507,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     /**
      * Play designated sound
      */
-    public void playSound (String fileName)
+    public void playSound (String filePath)
     {
-        Clip sound = createClip(fileName);
+        Clip sound = createClip(filePath);
         if (sound.isRunning())
         {
             sound.stop();

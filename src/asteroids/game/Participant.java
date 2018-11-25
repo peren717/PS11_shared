@@ -32,6 +32,9 @@ public abstract class Participant
 
     /** True if the Participant is expired */
     private boolean expired;
+    
+    /** True if the participant is invulnerable*/
+    protected boolean isInvulnerable;
 
     /**
      * Constructs an active Participant with no velocity, rotation, or border.
@@ -314,5 +317,22 @@ public abstract class Participant
             border = getOutline();
         }
         g.draw(border);
+    }
+    
+    public void setInvulnerability ()
+    {
+        if (this.isInvulnerable)
+        {
+            this.isInvulnerable = false;
+        }
+        else
+        {
+            this.isInvulnerable = true;
+        }
+    }
+    
+    public boolean isInvulnerability()
+    {
+        return this.isInvulnerable;
     }
 }

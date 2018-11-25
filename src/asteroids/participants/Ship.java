@@ -129,15 +129,13 @@ public class Ship extends Participant implements AsteroidDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof ShipDestroyer)
+        if (p instanceof ShipDestroyer && !this.isInvulnerable)
         {
             // Expire the ship from the game
             Participant.expire(this);
 
             // Tell the controller the ship was destroyed
             controller.shipDestroyed();
-            
-
         }
     }
 

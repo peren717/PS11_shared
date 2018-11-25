@@ -17,6 +17,8 @@ public class Screen extends JPanel
     /** Game controller */
     private Controller controller;
 
+    private int level;
+
     /**
      * Creates an empty screen
      */
@@ -38,6 +40,11 @@ public class Screen extends JPanel
     public void setLegend (String legend)
     {
         this.legend = legend;
+    }
+
+    public void setLevel (int level)
+    {
+        this.level = level;
     }
 
     /**
@@ -64,5 +71,13 @@ public class Screen extends JPanel
         // Draw the legend across the middle of the panel
         int size = g.getFontMetrics().stringWidth(legend);
         g.drawString(legend, (SIZE - size) / 2, SIZE / 2);
+        
+        //Draw the level
+        if (level > 0)
+        {
+            g.setFont(new Font("SansSerif", 0, 50));
+            g.drawString("Level:" + level, SIZE - 200, 50);
+        }
+
     }
 }
