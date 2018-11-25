@@ -69,6 +69,7 @@ public class Controller implements KeyListener, ActionListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
+        
     }
 
     /**
@@ -167,6 +168,13 @@ public class Controller implements KeyListener, ActionListener
 
         // Place the ship
         placeShip();
+        
+        //reset movement
+        right = false;
+        left = false;
+        forward = false;
+        backward = false;
+        fire = false;
 
         // Reset statistics
         lives = 3;
