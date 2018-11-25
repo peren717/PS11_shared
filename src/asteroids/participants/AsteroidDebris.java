@@ -12,16 +12,13 @@ public class AsteroidDebris extends Participant
     /*
      * Creates new piece of debris at x and y moving in direction that disappears at the end of the timer.
      */
-    public AsteroidDebris (double x, double y, double direction, int num)
+    public AsteroidDebris (double x, double y, double direction)
     {
-        while (num > 0)
-        {
             this.setPosition(x, y);
             this.setVelocity(1.0, direction);
             this.outline = new Ellipse2D.Double(0.0, 0.0, 1.0, 1.0);
             new ParticipantCountdownTimer(this, this, 1000);
-            num--;
-        }
+
     }
     
 
