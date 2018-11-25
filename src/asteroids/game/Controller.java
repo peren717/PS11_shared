@@ -82,7 +82,7 @@ public class Controller implements KeyListener, ActionListener
         display.setLegend("Asteroids");
 
         // Place four asteroids near the corners of the screen.
-        placeAsteroids(level);
+        placeAsteroids(4);
     }
 
     /**
@@ -110,9 +110,8 @@ public class Controller implements KeyListener, ActionListener
      * Places an asteroid near the corners of the screen based on level. Gives it a random velocity, variety, and
      * rotation.
      */
-    private void placeAsteroids (int level)
+    private void placeAsteroids (int num)
     {
-        int num = level;
         while (num > 0)
         {
             if (num % 4 == 0)
@@ -157,7 +156,7 @@ public class Controller implements KeyListener, ActionListener
         clear();
 
         // Plac asteroids
-        placeAsteroids(level);
+        placeAsteroids(4);
 
         // Place the ship
         placeShip();
