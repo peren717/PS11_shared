@@ -335,7 +335,7 @@ public abstract class Participant
     }
     
     /**
-     * @return turn if issetInvulnerable
+     * Return true if issetInvulnerable
      */
     public boolean isInvulnerability()
     {
