@@ -16,6 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
+import asteroids.participants.Star;
 
 /**
  * Controls a game of Asteroids.
@@ -108,6 +109,8 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
         // Place four asteroids near the corners of the screen.
         placeAsteroids(4);
+
+        placeStars();
     }
 
     /**
@@ -163,6 +166,18 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     }
 
     /**
+     * Place some stars
+     */
+    private void placeStars ()
+    {
+        Random rng = new Random();
+        for (int i = 0; i < rng.nextInt(10) + 5; i++)
+        {
+            this.addParticipant(new Star());
+        }
+    }
+
+    /**
      * Clears the screen so that nothing is displayed
      */
     private void clear ()
@@ -181,7 +196,10 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         clear();
 
         // Place asteroids
-         placeAsteroids(4);
+        placeAsteroids(4);
+
+        // place stars
+        placeStars();
 
         // Place the ship
         placeShip();
@@ -303,8 +321,11 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                     ship.fire();
                 }
             }
+
+            // Update mouse coordinates
             mouseY = MouseInfo.getPointerInfo().getLocation().y;
             mouseX = MouseInfo.getPointerInfo().getLocation().x;
+            // Update ship direction
             if (ship != null)
             {
                 double dx = mouseX - ship.getX();
