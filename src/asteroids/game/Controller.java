@@ -328,7 +328,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 {
                     ship.accelerate();
                 }
-                else if (fire)
+                if (fire)
                 {
                     ship.fire();
                 }
