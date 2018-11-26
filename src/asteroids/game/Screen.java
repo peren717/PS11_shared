@@ -103,7 +103,7 @@ public class Screen extends JPanel
             g.drawString("Lives:", 1, 50);
             for (int i = 0; i < lives; i++)
             {
-                this.liveShape.setPosition(150+i*26, 35);
+                this.liveShape.setPosition(150 + i * 26, 35);
                 this.liveShape.move();
                 this.liveShape.draw(g);
             }

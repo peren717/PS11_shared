@@ -67,19 +67,19 @@ public class Display extends JFrame
     {
         screen.setLegend(s);
     }
-    
+
     /**
      * Sets the level
      */
-    public void setLevel(int level)
+    public void setLevel (int level)
     {
         screen.setLevel(level);
     }
-    
+
     /**
      * Sets the lives
      */
-    public void setLives(int lives)
+    public void setLives (int lives)
     {
         screen.setLives(lives);
     }
