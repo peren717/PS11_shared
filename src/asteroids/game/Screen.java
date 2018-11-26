@@ -4,6 +4,7 @@ import static asteroids.game.Constants.*;
 import java.awt.*;
 import java.util.Iterator;
 import javax.swing.*;
+import asteroids.participants.Ship;
 
 /**
  * The area of the display in which the game takes place.
@@ -17,7 +18,14 @@ public class Screen extends JPanel
     /** Game controller */
     private Controller controller;
 
+    /** Level currently being played **/
     private int level;
+
+    /** lives currently being played **/
+    private int lives;
+
+    /** A shape used to draw lives */
+    private Ship liveShape;
 
     /**
      * Creates an empty screen
@@ -32,6 +40,7 @@ public class Screen extends JPanel
         setForeground(Color.white);
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 120));
         setFocusable(true);
+        liveShape = new Ship(0, 0, 1.5 * Math.PI, controller);
     }
 
     /**
@@ -42,9 +51,18 @@ public class Screen extends JPanel
         this.legend = legend;
     }
 
+    /**
+     * Set current level
+     */
     public void setLevel (int level)
     {
         this.level = level;
+    }
+
+    /** Set current lives */
+    public void setLives (int lives)
+    {
+        this.lives = lives;
     }
 
     /**
@@ -71,12 +89,24 @@ public class Screen extends JPanel
         // Draw the legend across the middle of the panel
         int size = g.getFontMetrics().stringWidth(legend);
         g.drawString(legend, (SIZE - size) / 2, SIZE / 2);
-        
-        //Draw the level
+
+        // Draw the level
         if (level > 0)
         {
             g.setFont(new Font("SansSerif", 0, 50));
-            g.drawString("Level:" + level, SIZE - 200, 50);
+            g.drawString("Level:" + level, SIZE - 180, 50);
+        }
+
+        // Draw the score
+        if (level > 0)
+        {
+            g.drawString("Lives:", 1, 50);
+            for (int i = 0; i < lives; i++)
+            {
+                this.liveShape.setPosition(150+i*26, 35);
+                this.liveShape.move();
+                this.liveShape.draw(g);
+            }
         }
 
     }

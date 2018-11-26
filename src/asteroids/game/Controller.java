@@ -248,6 +248,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
         // Decrement lives
         lives--;
+        display.setLives(lives);
 
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
@@ -301,6 +302,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             initialScreen();
             level = 1;
             display.setLevel(level);
+            lives = 3;
+            display.setLives(lives);
+
         }
 
         // Time to refresh the screen and deal with keyboard input
@@ -324,11 +328,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 {
                     ship.accelerate();
                 }
-                else if (backward)
-                {
-                    ship.decelerate();
-                }
-                if (fire)
+                else if (fire)
                 {
                     ship.fire();
                 }
@@ -384,6 +384,10 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 placeAsteroids(level + 4);
                 level++;
                 display.setLevel(level);
+            }
+            else
+            {
+                this.placeShip();
             }
         }
     }

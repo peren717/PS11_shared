@@ -75,4 +75,12 @@ public class Display extends JFrame
     {
         screen.setLevel(level);
     }
+    
+    /**
+     * Sets the lives
+     */
+    public void setLives(int lives)
+    {
+        screen.setLives(lives);
+    }
 }
