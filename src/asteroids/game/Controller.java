@@ -67,6 +67,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     /** console command */
     private String consoleCommand;
 
+    /** True if mouse control is enabled */
+    private boolean mouseControl;
+
     /**
      * Constructs a controller to coordinate the game and screen
      */
@@ -86,6 +89,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
         // Initialize level
         level = 1;
+
+        // initialize control
+        mouseControl = false;
 
         // Bring up the splash screen and start the refresh timer
         splashScreen();
@@ -215,7 +221,10 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         fire = false;
 
         // Reset statistics
+        level = 1;
+        display.setLevel(level);
         lives = 3;
+        display.setLives(lives);
 
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
@@ -300,11 +309,6 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         if (e.getSource() instanceof JButton)
         {
             initialScreen();
-            level = 1;
-            display.setLevel(level);
-            lives = 3;
-            display.setLives(lives);
-
         }
 
         // Time to refresh the screen and deal with keyboard input
@@ -338,7 +342,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             mouseY = MouseInfo.getPointerInfo().getLocation().y;
             mouseX = MouseInfo.getPointerInfo().getLocation().x;
             // Update ship direction
-            if (ship != null)
+            if (ship != null && mouseControl)
             {
                 double dx = mouseX - ship.getX();
                 double dy = mouseY - ship.getY();
@@ -454,6 +458,8 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             fire = false;
         }
+
+        // debugging console commands
         if (e.getKeyCode() == KeyEvent.VK_DECIMAL)
         {
             consoleCommand = JOptionPane.showInputDialog(null, "", "Console", JOptionPane.DEFAULT_OPTION);
@@ -468,6 +474,17 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 else if (consoleCommand.equals("add_as") && ship != null)
                 {
                     addParticipant(new Asteroid(new Random().nextInt(3), 2, 150, 150, 3, this));
+                }
+                else if (consoleCommand.equals("mousecontrol") && ship != null)
+                {
+                    if (mouseControl)
+                    {
+                        mouseControl = false;
+                    }
+                    if (!mouseControl)
+                    {
+                        mouseControl = true;
+                    }
                 }
                 else
                 {
@@ -533,7 +550,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     @Override
     public void mousePressed (MouseEvent e)
     {
-        if (e.getButton() == MouseEvent.BUTTON1)
+        if (e.getButton() == MouseEvent.BUTTON1 && mouseControl)
         {
             forward = true;
         }
@@ -550,7 +567,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     @Override
     public void mouseReleased (MouseEvent e)
     {
-        if (e.getButton() == MouseEvent.BUTTON1)
+        if (e.getButton() == MouseEvent.BUTTON1 && mouseControl)
         {
             forward = false;
         }
