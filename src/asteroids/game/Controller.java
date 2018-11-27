@@ -118,7 +118,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
         // Place four asteroids near the corners of the screen.
         placeAsteroids(4);
-
+        // place stars as background
         placeStars();
     }
 
@@ -388,11 +388,31 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 placeAsteroids(level + 4);
                 level++;
                 display.setLevel(level);
+                levelControl(level);
             }
             else
             {
                 this.placeShip();
             }
+        }
+    }
+    
+    /**
+     *  Spawns the alien ship according to the current
+     */
+    public void levelControl (int level)
+    {
+        if (level == 1)
+        {
+
+        }
+        else if (level == 2)
+        {
+
+        }
+        else if (level == 3)
+        {
+            
         }
     }
 
