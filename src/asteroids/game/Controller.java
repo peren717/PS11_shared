@@ -12,9 +12,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
-import asteroids.participants.Asteroid;
-import asteroids.participants.Ship;
-import asteroids.participants.Star;
+import asteroids.participants.*;
 
 /**
  * Controls a game of Asteroids.
@@ -26,6 +24,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
     /** The ship (if one is active) or null (otherwise) */
     private Ship ship;
+
+    /** The alien ship */
+    private AlienShip AlienShip;
 
     /** When this timer goes off, it is time to refresh the animation */
     private Timer refreshTimer;
@@ -229,6 +230,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
         // Give focus to the game screen
         display.requestFocusInWindow();
+
+        // Set the level control
+        this.levelControl(level);
     }
 
     /**
@@ -333,6 +337,18 @@ public class Controller implements KeyListener, ActionListener, MouseListener
                 }
             }
 
+            // Control the alien ship
+            if (AlienShip != null)
+            {
+                Random rng = new Random();
+                AlienShip.setSpeed(MAXIMUM_LARGE_ASTEROID_SPEED);
+                if (AlienShip.getX()==SIZE)
+                {
+                    AlienShip.rotate(Math.PI*3/2);
+                }
+                
+            }
+
             // Update mouse coordinates
             mouseY = MouseInfo.getPointerInfo().getLocation().y;
             mouseX = MouseInfo.getPointerInfo().getLocation().x;
@@ -391,23 +407,29 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             }
         }
     }
-    
+
     /**
-     *  Spawns the alien ship according to the current
+     * Spawns the alien ship according to the current level
      */
     public void levelControl (int level)
     {
         if (level == 1)
         {
-
+            Random rng = new Random();
+            int posY = rng.nextInt(SIZE);
+            AlienShip = new AlienShip(0, posY, 0, this);
+            this.addParticipant(AlienShip);
         }
         else if (level == 2)
         {
-
+            Random rng = new Random();
+            int posY = rng.nextInt(SIZE);
+            AlienShip = new AlienShip(0, posY, 0, this);
+            this.addParticipant(AlienShip);
         }
         else if (level == 3)
         {
-            
+
         }
     }
 
