@@ -4,9 +4,7 @@ import static asteroids.game.Constants.*;
 import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Random;
 import javax.sound.sampled.AudioSystem;
@@ -54,8 +52,6 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     private boolean right;
     /** Boolean that indicates ship movement */
     private boolean left;
-    /** Boolean that indicates ship movement */
-    private boolean backward;
     /** Boolean that indicates ship movement */
     private boolean fire;
 
@@ -217,7 +213,6 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         right = false;
         left = false;
         forward = false;
-        backward = false;
         fire = false;
 
         // Reset statistics
@@ -434,10 +429,6 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             forward = true;
         }
-        else if ((e.getKeyCode() == KeyEvent.VK_S | e.getKeyCode() == KeyEvent.VK_DOWN) && ship != null)
-        {
-            backward = true;
-        }
         if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship != null)
         {
             fire = true;
@@ -469,10 +460,6 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         else if ((e.getKeyCode() == KeyEvent.VK_W | e.getKeyCode() == KeyEvent.VK_UP) && ship != null)
         {
             forward = false;
-        }
-        else if ((e.getKeyCode() == KeyEvent.VK_S | e.getKeyCode() == KeyEvent.VK_DOWN) && ship != null)
-        {
-            backward = false;
         }
         if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship != null)
         {
