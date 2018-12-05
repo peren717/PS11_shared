@@ -5,6 +5,7 @@ import static asteroids.game.Constants.SHIP_FRICTION;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.Random;
 import asteroids.destroyers.AsteroidDestroyer;
 import asteroids.destroyers.ShipDestroyer;
 import asteroids.game.Controller;
@@ -19,26 +20,35 @@ public class AlienShip extends Participant implements ShipDestroyer
     /** Game controller */
     private Controller controller;
 
+    private boolean changeDirection = false;
+
+    private int size;
+
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
      */
-    public AlienShip (int x, int y, double direction, Controller controller)
+    public AlienShip (int x, int y, double direction, Controller controller, int size)
     {
+        this.size = size;
         this.controller = controller;
         setPosition(x, y);
         setRotation(direction);
 
         Path2D.Double poly = new Path2D.Double();
-        poly.moveTo(21, 0);
-        poly.lineTo(-21, 12);
-        poly.lineTo(-14, 10);
-        poly.lineTo(-14, -10);
-        poly.lineTo(-21, -12);
+        poly.moveTo(20, 10);
+        poly.lineTo(20, -10);
+        poly.lineTo(10, -20);
+        poly.lineTo(-10, -20);
+        poly.lineTo(-20, -10);
+        poly.lineTo(-20, 10);
+        poly.lineTo(-10, 20);
+        poly.lineTo(10, 20);
         poly.closePath();
         outline = poly;
 
         // Schedule an acceleration in two seconds, commented out
-        // new ParticipantCountdownTimer(this, "move", 2000);
+        new ParticipantCountdownTimer(this, "fire", 2000);
+        new ParticipantCountdownTimer(this, "changeDirection", 3000);
     }
 
     /**
@@ -73,8 +83,23 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void move ()
     {
-        applyFriction(SHIP_FRICTION);
+        Random rng = new Random();
         super.move();
+        if (changeDirection)
+        {
+            if (this.getDirection() != 0)
+            {
+                this.changeDirection = false;
+                this.setDirection(0);
+                new ParticipantCountdownTimer(this, "changeDirection", 3000);
+            }
+            else
+            {
+                this.changeDirection = false;
+                this.setDirection(rng.nextInt(3)+1);
+                new ParticipantCountdownTimer(this, "changeDirection", 3000);
+            }
+        }
     }
 
     /**
@@ -121,7 +146,7 @@ public class AlienShip extends Participant implements ShipDestroyer
     {
         if (p instanceof AsteroidDestroyer)
         {
-         // Expire the asteroid
+            // Expire the asteroid
             Participant.expire(this);
         }
     }
@@ -132,12 +157,29 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void countdownComplete (Object payload)
     {
-        // Give a burst of acceleration, then schedule another
-        // burst for 200 msecs from now.
-        if (payload.equals("move"))
+        Ship AlienShip = this.controller.getShip();
+        if (payload.equals("fire"))
         {
-            accelerate();
-            new ParticipantCountdownTimer(this, "move", 200);
+
+            if (AlienShip != null)
+            {
+                fire();
+                new ParticipantCountdownTimer(this, "fire", 2000);
+            }
         }
+        else if (payload.equals("changeDirection"))
+        {
+            changeDirection = true;
+        }
+    }
+
+    public int getSize ()
+    {
+        return size;
+    }
+
+    public void expire ()
+    {
+        Participant.expire(this);
     }
 }

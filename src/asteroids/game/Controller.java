@@ -341,12 +341,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             if (AlienShip != null)
             {
                 Random rng = new Random();
-                AlienShip.setSpeed(MAXIMUM_LARGE_ASTEROID_SPEED);
-                if (AlienShip.getX()==SIZE)
-                {
-                    AlienShip.rotate(Math.PI*3/2);
-                }
-                
+                AlienShip.setSpeed(MAXIMUM_LARGE_ASTEROID_SPEED);                
             }
 
             // Update mouse coordinates
@@ -417,14 +412,14 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             Random rng = new Random();
             int posY = rng.nextInt(SIZE);
-            AlienShip = new AlienShip(0, posY, 0, this);
+            AlienShip = new AlienShip(0, posY, 0, this,1);
             this.addParticipant(AlienShip);
         }
         else if (level == 2)
         {
             Random rng = new Random();
             int posY = rng.nextInt(SIZE);
-            AlienShip = new AlienShip(0, posY, 0, this);
+            AlienShip = new AlienShip(0, posY, 0, this,1);
             this.addParticipant(AlienShip);
         }
         else if (level == 3)
