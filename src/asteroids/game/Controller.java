@@ -410,9 +410,10 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     {
         if (level == 1)
         {
+            Participant.expire(this.AlienShip);
             Random rng = new Random();
             int posY = rng.nextInt(SIZE);
-            AlienShip = new AlienShip(0, posY, 0, this,1);
+            AlienShip = new AlienShip(0, posY, 0, this,1);           
             this.addParticipant(AlienShip);
         }
         else if (level == 2)

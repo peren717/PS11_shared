@@ -96,7 +96,7 @@ public class AlienShip extends Participant implements ShipDestroyer
             else
             {
                 this.changeDirection = false;
-                this.setDirection(rng.nextInt(3)+1);
+                this.setDirection(rng.nextInt(3) + 1);
                 new ParticipantCountdownTimer(this, "changeDirection", 3000);
             }
         }
@@ -131,11 +131,21 @@ public class AlienShip extends Participant implements ShipDestroyer
      */
     public void fire ()
     {
-        if (!controller.hasMaxBullets())
+        controller.addParticipant(new AlienBullets(this.getX(), this.getY(), getPlayerDirection()));
+        controller.playSound("/sounds/fire.wav");
+    }
+
+    public double getPlayerDirection()
+    {
+        double direction = 0;
+        Ship ship = this.controller.getShip();
+        if (ship!=null)
         {
-            controller.addParticipant(new Bullets(this.getXNose(), this.getYNose(), this.getRotation()));
-            controller.playSound("/sounds/fire.wav");
+        double dX= ship.getX() -this.getX();
+        double dY = ship.getY() - this.getY();
+        direction = Math.acos(dX/Math.sqrt(dX*dX+dY*dY));
         }
+        return direction;        
     }
 
     /**
@@ -157,15 +167,11 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void countdownComplete (Object payload)
     {
-        Ship AlienShip = this.controller.getShip();
+        Ship Ship = this.controller.getShip();
         if (payload.equals("fire"))
         {
-
-            if (AlienShip != null)
-            {
-                fire();
-                new ParticipantCountdownTimer(this, "fire", 2000);
-            }
+            fire();
+            new ParticipantCountdownTimer(this, "fire", 2000);
         }
         else if (payload.equals("changeDirection"))
         {
