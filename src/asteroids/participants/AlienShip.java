@@ -1,5 +1,6 @@
 package asteroids.participants;
 
+import static asteroids.game.Constants.RANDOM;
 import static asteroids.game.Constants.SHIP_ACCELERATION;
 import static asteroids.game.Constants.SHIP_FRICTION;
 import java.awt.Shape;
@@ -27,22 +28,36 @@ public class AlienShip extends Participant implements ShipDestroyer
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
      */
-    public AlienShip (int x, int y, double direction, Controller controller, int size)
+    public AlienShip (int x, int y, double direction, Controller controller, int level)
     {
-        this.size = size;
+        this.size = level - 1;
         this.controller = controller;
         setPosition(x, y);
         setRotation(direction);
 
         Path2D.Double poly = new Path2D.Double();
-        poly.moveTo(20, 10);
-        poly.lineTo(20, -10);
-        poly.lineTo(10, -20);
-        poly.lineTo(-10, -20);
-        poly.lineTo(-20, -10);
-        poly.lineTo(-20, 10);
-        poly.lineTo(-10, 20);
-        poly.lineTo(10, 20);
+        if (size == 1)
+        {
+            poly.moveTo(20, 10);
+            poly.lineTo(20, -10);
+            poly.lineTo(10, -20);
+            poly.lineTo(-10, -20);
+            poly.lineTo(-20, -10);
+            poly.lineTo(-20, 10);
+            poly.lineTo(-10, 20);
+            poly.lineTo(10, 20);
+        }
+        else
+        {
+            poly.moveTo(20 / 2, 10 / 2);
+            poly.lineTo(20 / 2, -10 / 2);
+            poly.lineTo(10 / 2, -20 / 2);
+            poly.lineTo(-10 / 2, -20 / 2);
+            poly.lineTo(-20 / 2, -10 / 2);
+            poly.lineTo(-20 / 2, 10 / 2);
+            poly.lineTo(-10 / 2, 20 / 2);
+            poly.lineTo(10 / 2, 20 / 2);
+        }
         poly.closePath();
         outline = poly;
 
@@ -135,17 +150,25 @@ public class AlienShip extends Participant implements ShipDestroyer
         controller.playSound("/sounds/fire.wav");
     }
 
-    public double getPlayerDirection()
+    public double getPlayerDirection ()
     {
-        double direction = 0;
-        Ship ship = this.controller.getShip();
-        if (ship!=null)
+        Random rng = new Random();
+        double direction = rng.nextInt(6);
+        if (size == 1)
         {
-        double dX= ship.getX() -this.getX();
-        double dY = ship.getY() - this.getY();
-        direction = Math.acos(dX/Math.sqrt(dX*dX+dY*dY));
+            return direction;
         }
-        return direction;        
+        else
+        {
+            Ship ship = this.controller.getShip();
+            if (ship != null)
+            {
+                double dX = ship.getX() - this.getX();
+                double dY = ship.getY() - this.getY();
+                direction = Math.acos(dX / Math.sqrt(dX * dX + dY * dY) + (rng.nextInt(2) - 2) / 75);
+            }
+            return direction;
+        }
     }
 
     /**
@@ -154,11 +177,23 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof AsteroidDestroyer)
+        if (p instanceof Bullets)
         {
             // Expire the asteroid
             Participant.expire(this);
+            this.controller.AlienShipDestroyed();
+            controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+            controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+            if (size == 1)
+            {
+                this.controller.scoreControl(200);
+            }
+            else
+            {
+                this.controller.scoreControl(1000);
+            }
         }
+
     }
 
     /**
@@ -182,10 +217,5 @@ public class AlienShip extends Participant implements ShipDestroyer
     public int getSize ()
     {
         return size;
-    }
-
-    public void expire ()
-    {
-        Participant.expire(this);
     }
 }

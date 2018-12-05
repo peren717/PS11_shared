@@ -15,9 +15,12 @@ public class Ship extends Participant implements AsteroidDestroyer
 {
     /** The outline of the ship */
     private Shape outline;
+    private Shape forwardOutline;
 
     /** Game controller */
     private Controller controller;
+
+    private boolean forward;
 
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
@@ -37,8 +40,18 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.closePath();
         outline = poly;
 
-        // Schedule an acceleration in two seconds, commented out
-        // new ParticipantCountdownTimer(this, "move", 2000);
+        poly = new Path2D.Double();
+        poly.moveTo(21, 0);
+        poly.lineTo(-21, 12);
+        poly.lineTo(-14, 10);
+        poly.lineTo(-14, -5);
+        poly.lineTo(-25, 0.);
+        poly.lineTo(-14, 5);
+        poly.lineTo(-14, -10);
+        poly.lineTo(-21, -12);
+        poly.closePath();
+        forwardOutline = poly;
+
     }
 
     /**
@@ -64,6 +77,10 @@ public class Ship extends Participant implements AsteroidDestroyer
     @Override
     protected Shape getOutline ()
     {
+        if (forward)
+        {
+            return forwardOutline;
+        }
         return outline;
     }
 
@@ -100,15 +117,15 @@ public class Ship extends Participant implements AsteroidDestroyer
     {
         accelerate(SHIP_ACCELERATION);
         controller.playSound("/sounds/thrust.wav");
+        forward = true;
     }
 
     /**
      * Decelerate by SHIP_ACCELERATION
      */
-    public void decelerate ()
+    public void stop ()
     {
-        accelerate(-SHIP_ACCELERATION);
-        controller.playSound("/sounds/thrust.wav");
+        forward = false;
     }
 
     /**

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import asteroids.participants.AlienShip;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Bullets;
 
@@ -96,6 +97,29 @@ public class ParticipantState
         for (Participant p : pendingAdds)
         {
             if (p instanceof Bullets && !p.isExpired())
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /**
+     * Returns the number of alien ship that are active participants
+     */
+    public int countAlienShip ()
+    {
+        int count = 0;
+        for (Participant p : participants)
+        {
+            if (p instanceof AlienShip && !p.isExpired())
+            {
+                count++;
+            }
+        }
+        for (Participant p : pendingAdds)
+        {
+            if (p instanceof AlienShip && !p.isExpired())
             {
                 count++;
             }

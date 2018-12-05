@@ -23,6 +23,9 @@ public class Screen extends JPanel
 
     /** lives currently being played **/
     private int lives;
+    
+    /** Current Score**/
+    private int score;
 
     /** A shape used to draw lives */
     private Ship liveShape;
@@ -64,6 +67,12 @@ public class Screen extends JPanel
     {
         this.lives = lives;
     }
+    
+    /** Set current score*/
+    public void setScore(int score)
+    {
+        this.score = score;
+    }
 
     /**
      * Paint the participants onto this panel
@@ -93,20 +102,27 @@ public class Screen extends JPanel
         // Draw the level
         if (level > 0)
         {
-            g.setFont(new Font("SansSerif", 0, 50));
-            g.drawString("Level:" + level, SIZE - 180, 50);
+            g.setFont(new Font("SansSerif", 0, 25));
+            g.drawString("Level:" + level, SIZE - 100, 30);
         }
 
-        // Draw the score
+        // Draw the lives
         if (level > 0)
         {
-            g.drawString("Lives:", 1, 50);
+            g.drawString("Lives:", 1, 30);
             for (int i = 0; i < lives; i++)
             {
-                this.liveShape.setPosition(150+i*26, 35);
+                this.liveShape.setPosition(75+i*26, 35);
                 this.liveShape.move();
                 this.liveShape.draw(g);
             }
+        }
+        
+        // Draw the Score
+        if (level > 0)
+        {
+            g.setFont(new Font("SansSerif", 0, 25));
+            g.drawString("Score:" + score, SIZE/2-50, 30);
         }
 
     }

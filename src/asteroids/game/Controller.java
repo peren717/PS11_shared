@@ -47,6 +47,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     /** Level currently being played **/
     private int level;
 
+    /** Current Score */
+    private int score;
+
     /** Boolean that indicates ship movement */
     private boolean forward;
     /** Boolean that indicates ship movement */
@@ -191,6 +194,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         pstate.clear();
         display.setLegend("");
         ship = null;
+        AlienShip = null;
     }
 
     /**
@@ -250,7 +254,10 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     {
         // Null out the ship
         ship = null;
-
+        fire = false;
+        forward = false;
+        left = false;
+        right = false;
         // Display a legend
         display.setLegend("Ouch!");
 
@@ -272,6 +279,15 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             scheduleTransition(END_DELAY);
         }
+
+        display.setScore(score);
+    }
+
+    public void AlienShipDestroyed ()
+    {
+        AlienShip = null;
+        Random rng = new Random();
+        this.scheduleTransition(5000 + rng.nextInt(5000));
     }
 
     /**
@@ -340,8 +356,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             // Control the alien ship
             if (AlienShip != null)
             {
-                Random rng = new Random();
-                AlienShip.setSpeed(MAXIMUM_LARGE_ASTEROID_SPEED);                
+                AlienShip.setSpeed(MAXIMUM_LARGE_ASTEROID_SPEED);
             }
 
             // Update mouse coordinates
@@ -389,16 +404,20 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             {
                 finalScreen();
             }
-            else if (pstate.countAsteroids() == 0)
+            else if (pstate.countAsteroids() == 0 && pstate.countAlienShip()==0)
             {
                 placeAsteroids(level + 4);
                 level++;
                 display.setLevel(level);
                 levelControl(level);
             }
-            else
+            else if (ship == null)
             {
                 this.placeShip();
+            }
+            else if (AlienShip == null)
+            {
+                levelControl(level);
             }
         }
     }
@@ -408,25 +427,25 @@ public class Controller implements KeyListener, ActionListener, MouseListener
      */
     public void levelControl (int level)
     {
-        if (level == 1)
-        {
-            Participant.expire(this.AlienShip);
-            Random rng = new Random();
-            int posY = rng.nextInt(SIZE);
-            AlienShip = new AlienShip(0, posY, 0, this,1);           
-            this.addParticipant(AlienShip);
-        }
-        else if (level == 2)
+        if (level == 2)
         {
             Random rng = new Random();
             int posY = rng.nextInt(SIZE);
-            AlienShip = new AlienShip(0, posY, 0, this,1);
+            AlienShip = new AlienShip(0, posY, 0, this, level);
             this.addParticipant(AlienShip);
         }
-        else if (level == 3)
+        else if (level > 2)
         {
+            Random rng = new Random();
+            int posY = rng.nextInt(SIZE);
+            AlienShip = new AlienShip(0, posY, 0, this, level);
+            this.addParticipant(AlienShip);
+        }
+    }
 
-        }
+    public void scoreControl (int score)
+    {
+        this.score = this.score + score;
     }
 
     /**
@@ -478,6 +497,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         else if ((e.getKeyCode() == KeyEvent.VK_W | e.getKeyCode() == KeyEvent.VK_UP) && ship != null)
         {
             forward = false;
+            ship.stop();
         }
         if ((e.getKeyCode() == KeyEvent.VK_SPACE) && ship != null)
         {
@@ -595,6 +615,10 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         if (e.getButton() == MouseEvent.BUTTON1 && mouseControl)
         {
             forward = false;
+            if (ship != null)
+            {
+                ship.stop();
+            }
         }
         else
         {

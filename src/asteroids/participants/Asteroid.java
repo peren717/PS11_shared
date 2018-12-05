@@ -147,21 +147,31 @@ public class Asteroid extends Participant implements ShipDestroyer
         {
             if (this.getSize() == 2)
             {
-                controller.addParticipant(new Asteroid(0, 1, this.getX(), this.getY(), RANDOM.nextInt(3 + 1) + 3, controller));
-                controller.addParticipant(new Asteroid(0, 1, this.getX(), this.getY(), RANDOM.nextInt(3 + 1) + 3, controller));
+                controller.addParticipant(
+                        new Asteroid(0, 1, this.getX(), this.getY(), RANDOM.nextInt(3 + 1) + 3, controller));
+                controller.addParticipant(
+                        new Asteroid(0, 1, this.getX(), this.getY(), RANDOM.nextInt(3 + 1) + 3, controller));
                 controller.addParticipant(
                         new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
                 controller.addParticipant(
                         new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+                controller.scoreControl(20);
             }
             else if (this.getSize() == 1)
             {
-                controller.addParticipant(new Asteroid(0, 0, this.getX(), this.getY(), RANDOM.nextInt(5 + 1) + 3, controller));
-                controller.addParticipant(new Asteroid(0, 0, this.getX(), this.getY(), RANDOM.nextInt(5 + 1) + 3, controller));
+                controller.addParticipant(
+                        new Asteroid(0, 0, this.getX(), this.getY(), RANDOM.nextInt(5 + 1) + 3, controller));
+                controller.addParticipant(
+                        new Asteroid(0, 0, this.getX(), this.getY(), RANDOM.nextInt(5 + 1) + 3, controller));
                 controller.addParticipant(
                         new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
                 controller.addParticipant(
                         new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
+                controller.scoreControl(50);
+            }
+            else
+            {
+                controller.scoreControl(100);
             }
 
             controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
