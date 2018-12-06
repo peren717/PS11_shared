@@ -138,7 +138,7 @@ public class Asteroid extends Participant implements ShipDestroyer
 
     /**
      * When an Asteroid collides with an AsteroidDestroyer, it expires or splits, based on size. Will also create
-     * temporary debris where the destroyed asteroid used to be.
+     * temporary debris where the destroyed asteroid used to be. Additionally, explosion sounds will play and scores will update.
      */
     @Override
     public void collidedWith (Participant p)
@@ -156,6 +156,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                 controller.addParticipant(
                         new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
                 controller.scoreControl(20);
+                controller.playSound("/sounds/bangLarge.wav");
             }
             else if (this.getSize() == 1)
             {
@@ -168,9 +169,11 @@ public class Asteroid extends Participant implements ShipDestroyer
                 controller.addParticipant(
                         new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
                 controller.scoreControl(50);
+                controller.playSound("/sounds/bangMedium.wav");
             }
             else
             {
+                controller.playSound("/sounds/bangSmall.wav");
                 controller.scoreControl(100);
             }
 
