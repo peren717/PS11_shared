@@ -49,6 +49,9 @@ public class AlienShip extends Participant implements ShipDestroyer, AsteroidDes
             poly.lineTo(-5.0, -17.0);
             poly.lineTo(5.0, -17.0);
             poly.lineTo(9.0, -9.0);
+            
+            controller.playSound("/sounds/saucerBig.wav");
+            new ParticipantCountdownTimer(this, "Big", 400);
         }
         else
         {
@@ -64,11 +67,13 @@ public class AlienShip extends Participant implements ShipDestroyer, AsteroidDes
             poly.lineTo(-5.0 / 2, -17.0 / 2);
             poly.lineTo(5.0 / 2, -17.0 / 2);
             poly.lineTo(9.0 / 2, -9.0 / 2);
+            
+            controller.playSound("/sounds/saucerSmall.wav");
+            new ParticipantCountdownTimer(this, "Small", 400);
         }
         poly.closePath();
         outline = poly;
 
-        // Schedule an acceleration in two seconds, commented out
         new ParticipantCountdownTimer(this, "fire", 2000);
         new ParticipantCountdownTimer(this, "changeDirection", 3000);
     }
@@ -131,30 +136,6 @@ public class AlienShip extends Participant implements ShipDestroyer, AsteroidDes
                 }
             }
         }
-    }
-
-    /**
-     * Turns right by Pi/16 radians
-     */
-    public void turnRight ()
-    {
-        rotate(Math.PI / 16);
-    }
-
-    /**
-     * Turns left by Pi/16 radians
-     */
-    public void turnLeft ()
-    {
-        rotate(-Math.PI / 16);
-    }
-
-    /**
-     * Accelerates by SHIP_ACCELERATION
-     */
-    public void accelerate ()
-    {
-        accelerate(SHIP_ACCELERATION);
     }
 
     /**
@@ -222,11 +203,22 @@ public class AlienShip extends Participant implements ShipDestroyer, AsteroidDes
         if (payload.equals("fire"))
         {
             fire();
+            controller.playSound("/sounds/fire.wav");
             new ParticipantCountdownTimer(this, "fire", 2000);
         }
         else if (payload.equals("changeDirection"))
         {
             changeDirection = true;
+        }
+        else if (payload.equals("Big"))
+        {
+            controller.playSound("/sounds/saucerBig.wav");
+            new ParticipantCountdownTimer(this, "Big", 400);
+        }
+        else if (payload.equals("Small"))
+        {
+            controller.playSound("/sounds/saucerSmall.wav");
+            new ParticipantCountdownTimer(this, "Small", 400);
         }
     }
 
