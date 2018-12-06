@@ -150,6 +150,9 @@ public class Ship extends Participant implements AsteroidDestroyer
         {
             // Expire the ship from the game
             Participant.expire(this);
+            
+            //plays explosions sound
+            controller.playSound("/sounds/bangShip.wav");
 
             // Tell the controller the ship was destroyed
             controller.shipDestroyed();
