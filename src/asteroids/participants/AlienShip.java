@@ -2,7 +2,6 @@ package asteroids.participants;
 
 import static asteroids.game.Constants.RANDOM;
 import static asteroids.game.Constants.SHIP_ACCELERATION;
-import static asteroids.game.Constants.SHIP_FRICTION;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
@@ -13,7 +12,7 @@ import asteroids.game.Controller;
 import asteroids.game.Participant;
 import asteroids.game.ParticipantCountdownTimer;
 
-public class AlienShip extends Participant implements ShipDestroyer
+public class AlienShip extends Participant implements ShipDestroyer, AsteroidDestroyer
 {
     /** The outline of the ship */
     private Shape outline;
@@ -38,25 +37,33 @@ public class AlienShip extends Participant implements ShipDestroyer
         Path2D.Double poly = new Path2D.Double();
         if (size == 1)
         {
-            poly.moveTo(20, 10);
-            poly.lineTo(20, -10);
-            poly.lineTo(10, -20);
-            poly.lineTo(-10, -20);
-            poly.lineTo(-20, -10);
-            poly.lineTo(-20, 10);
-            poly.lineTo(-10, 20);
-            poly.lineTo(10, 20);
+            poly.moveTo(20.0, 0.0);
+            poly.lineTo(9.0, 9.0);
+            poly.lineTo(-9.0, 9.0);
+            poly.lineTo(-20.0, 0.0);
+            poly.lineTo(20.0, 0.0);
+            poly.lineTo(-20.0, 0.0);
+            poly.lineTo(-9.0, -9.0);
+            poly.lineTo(9.0, -9.0);
+            poly.lineTo(-9.0, -9.0);
+            poly.lineTo(-5.0, -17.0);
+            poly.lineTo(5.0, -17.0);
+            poly.lineTo(9.0, -9.0);
         }
         else
         {
-            poly.moveTo(20 / 2, 10 / 2);
-            poly.lineTo(20 / 2, -10 / 2);
-            poly.lineTo(10 / 2, -20 / 2);
-            poly.lineTo(-10 / 2, -20 / 2);
-            poly.lineTo(-20 / 2, -10 / 2);
-            poly.lineTo(-20 / 2, 10 / 2);
-            poly.lineTo(-10 / 2, 20 / 2);
-            poly.lineTo(10 / 2, 20 / 2);
+            poly.moveTo(20.0 / 2, 0.0 / 2);
+            poly.lineTo(9.0 / 2, 9.0 / 2);
+            poly.lineTo(-9.0 / 2, 9.0 / 2);
+            poly.lineTo(-20.0 / 2, 0.0 / 2);
+            poly.lineTo(20.0 / 2, 0.0 / 2);
+            poly.lineTo(-20.0 / 2, 0.0 / 2);
+            poly.lineTo(-9.0 / 2, -9.0 / 2);
+            poly.lineTo(9.0 / 2, -9.0 / 2);
+            poly.lineTo(-9.0 / 2, -9.0 / 2);
+            poly.lineTo(-5.0 / 2, -17.0 / 2);
+            poly.lineTo(5.0 / 2, -17.0 / 2);
+            poly.lineTo(9.0 / 2, -9.0 / 2);
         }
         poly.closePath();
         outline = poly;
@@ -98,7 +105,7 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void move ()
     {
-        Random rng = new Random();
+        int num;
         super.move();
         if (changeDirection)
         {
@@ -111,8 +118,17 @@ public class AlienShip extends Participant implements ShipDestroyer
             else
             {
                 this.changeDirection = false;
-                this.setDirection(rng.nextInt(3) + 1);
-                new ParticipantCountdownTimer(this, "changeDirection", 3000);
+                num = RANDOM.nextInt(1);
+                if (num == 0)
+                {
+                    this.setDirection(180/Math.PI);
+                    new ParticipantCountdownTimer(this, "changeDirection", 3000);
+                }
+                else if (num == 1)
+                {
+                    this.setDirection(-(180/Math.PI));
+                    new ParticipantCountdownTimer(this, "changeDirection", 3000);
+                }
             }
         }
     }
@@ -177,10 +193,11 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof Bullets)
+        if (p instanceof Bullets || p instanceof Asteroid || p instanceof Ship)
         {
             // Expire the asteroid
             Participant.expire(this);
+
             this.controller.AlienShipDestroyed();
             controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
             controller.addParticipant(new AsteroidDebris(this.getX(), this.getY(), 2 * Math.PI * RANDOM.nextDouble()));
@@ -202,7 +219,6 @@ public class AlienShip extends Participant implements ShipDestroyer
     @Override
     public void countdownComplete (Object payload)
     {
-        Ship Ship = this.controller.getShip();
         if (payload.equals("fire"))
         {
             fire();
