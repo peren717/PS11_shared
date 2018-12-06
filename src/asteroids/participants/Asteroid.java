@@ -3,6 +3,7 @@ package asteroids.participants;
 import static asteroids.game.Constants.*;
 import java.awt.Shape;
 import java.awt.geom.*;
+import java.util.Random;
 import asteroids.destroyers.AsteroidDestroyer;
 import asteroids.destroyers.ShipDestroyer;
 import asteroids.game.Controller;
@@ -138,7 +139,8 @@ public class Asteroid extends Participant implements ShipDestroyer
 
     /**
      * When an Asteroid collides with an AsteroidDestroyer, it expires or splits, based on size. Will also create
-     * temporary debris where the destroyed asteroid used to be. Additionally, explosion sounds will play and scores will update.
+     * temporary debris where the destroyed asteroid used to be. Additionally, explosion sounds will play and scores
+     * will update.
      */
     @Override
     public void collidedWith (Participant p)
@@ -189,7 +191,19 @@ public class Asteroid extends Participant implements ShipDestroyer
 
             // Inform the controller
             controller.asteroidDestroyed();
+            if (controller.getVersion() == 1)
+            {
+                this.dropLoot();
+            }
+        }
+    }
 
+    public void dropLoot ()
+    {
+        Random rng = new Random();
+        if (rng.nextInt(100) < 20)
+        {
+            controller.addParticipant(new supply(rng.nextInt(3), this.getX(), this.getY(), controller));
         }
     }
 }

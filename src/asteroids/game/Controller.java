@@ -70,10 +70,13 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     /** True if mouse control is enabled */
     private boolean mouseControl;
 
+    /** The version of the game */
+    private int version;
+
     /**
      * Constructs a controller to coordinate the game and screen
      */
-    public Controller ()
+    public Controller (int version)
     {
         // Initialize the ParticipantState
         pstate = new ParticipantState();
@@ -97,6 +100,9 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
+
+        // Sets the version
+        this.version = version;
     }
 
     /**
@@ -118,8 +124,11 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
         // Place four asteroids near the corners of the screen.
         placeAsteroids(4);
-        // place stars as background
-        placeStars();
+        if (version == 1)
+        {
+            // place stars as background
+            placeStars();
+        }
     }
 
     /**
@@ -208,8 +217,11 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         // Place asteroids
         placeAsteroids(4);
 
-        // place stars
-        placeStars();
+        if (version == 1)
+        {
+            // place stars
+            placeStars();
+        }
 
         // Place the ship
         placeShip();
@@ -375,7 +387,6 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
             // Refresh screen
             display.refresh();
-
         }
     }
 
@@ -404,7 +415,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             {
                 finalScreen();
             }
-            else if (pstate.countAsteroids() == 0 && pstate.countAlienShip()==0)
+            else if (pstate.countAsteroids() == 0 && pstate.countAlienShip() == 0)
             {
                 placeAsteroids(level + 4);
                 level++;
@@ -470,6 +481,26 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             fire = true;
         }
+
+        if (version == 1 && e.getKeyCode() == KeyEvent.VK_M && ship != null && version == 1)
+        {
+            if (mouseControl)
+            {
+                mouseControl = false;
+            }
+            if (!mouseControl)
+            {
+                mouseControl = true;
+            }
+        }
+    }
+
+    /**
+     * Return the version of the game
+     */
+    public int getVersion ()
+    {
+        return version;
     }
 
     /**
@@ -634,5 +665,22 @@ public class Controller implements KeyListener, ActionListener, MouseListener
     @Override
     public void mouseExited (MouseEvent e)
     {
+    }
+
+    /**
+     * Add extra lives if having less than 10 lives, otherwise add 1000 score.
+     */
+    public void addLives (int num)
+    {
+        if (lives < 10)
+        {
+            this.lives = this.lives + num;
+            display.setLives(lives);
+        }
+        else
+        {
+            score = score + 1000;
+            display.setScore(score);
+        }
     }
 }

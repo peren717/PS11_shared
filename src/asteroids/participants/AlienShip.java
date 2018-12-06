@@ -1,7 +1,6 @@
 package asteroids.participants;
 
 import static asteroids.game.Constants.RANDOM;
-import static asteroids.game.Constants.SHIP_ACCELERATION;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;

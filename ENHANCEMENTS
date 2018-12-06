@@ -1,3 +1,6 @@
 Put detailed information about all extra credit enhancements here.  
 
-1. Fully functioning mouse control
+1. Fully functioning mouse control: Press M to enable, LMB to move, RMB to shoot
+2. 20% chance to drop loot on destruction of an asteroid: 5 second invincible mode, or one extra live depending on the variety of the loot box
+3. Moving background
+4. Testing console: press decimal to bring up console: "whosyourdaddy" to turn on invincible mode, "mousecontrol" to toggle mouse control on and off

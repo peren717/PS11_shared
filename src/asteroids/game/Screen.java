@@ -23,8 +23,8 @@ public class Screen extends JPanel
 
     /** lives currently being played **/
     private int lives;
-    
-    /** Current Score**/
+
+    /** Current Score **/
     private int score;
 
     /** A shape used to draw lives */
@@ -67,9 +67,9 @@ public class Screen extends JPanel
     {
         this.lives = lives;
     }
-    
-    /** Set current score*/
-    public void setScore(int score)
+
+    /** Set current score */
+    public void setScore (int score)
     {
         this.score = score;
     }
@@ -112,17 +112,24 @@ public class Screen extends JPanel
             g.drawString("Lives:", 1, 30);
             for (int i = 0; i < lives; i++)
             {
-                this.liveShape.setPosition(75+i*26, 35);
+                this.liveShape.setPosition(75 + i * 26, 35);
                 this.liveShape.move();
                 this.liveShape.draw(g);
             }
         }
-        
+
         // Draw the Score
         if (level > 0)
         {
             g.setFont(new Font("SansSerif", 0, 25));
-            g.drawString("Score:" + score, SIZE/2-50, 30);
+            g.drawString("Score:" + score, SIZE / 2 - 50, 30);
+        }
+
+        // info
+        if (controller.getVersion() == 1 && level > 0)
+        {
+            g.setFont(new Font("SansSerif", 0, 15));
+            g.drawString("Press M to enable mouse control", SIZE - 240, SIZE - 20);
         }
 
     }

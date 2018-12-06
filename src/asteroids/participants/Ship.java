@@ -15,11 +15,12 @@ public class Ship extends Participant implements AsteroidDestroyer
 {
     /** The outline of the ship */
     private Shape outline;
+    /** The outline of the ship with fire */
     private Shape forwardOutline;
 
     /** Game controller */
     private Controller controller;
-
+    /** True if the ship is accelerating */
     private boolean forward;
 
     /**
@@ -51,6 +52,9 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.lineTo(-21, -12);
         poly.closePath();
         forwardOutline = poly;
+
+        // play the sound in loop every 1 sec
+        new ParticipantCountdownTimer(this, "beat", 1000);
 
     }
 
@@ -150,13 +154,32 @@ public class Ship extends Participant implements AsteroidDestroyer
         {
             // Expire the ship from the game
             Participant.expire(this);
-            
-            //plays explosions sound
+
+            // plays explosions sound
             controller.playSound("/sounds/bangShip.wav");
 
             // Tell the controller the ship was destroyed
             controller.shipDestroyed();
         }
+    }
+
+    /**
+     * Gives the ship benefits based on the supply loot
+     */
+    public void getSupply (int variety)
+    {
+        if (variety == 1)
+        {
+            this.setInvulnerability();
+            new ParticipantCountdownTimer(this, "reset", 3500);
+            controller.playSound("/sounds/alarm_beep.wav");
+        }
+        else if (variety == 2)
+        {
+            controller.addLives(1);
+            controller.playSound("/sounds/coin_flip.wav");
+        }
+
     }
 
     /**
@@ -171,6 +194,16 @@ public class Ship extends Participant implements AsteroidDestroyer
         {
             accelerate();
             new ParticipantCountdownTimer(this, "move", 200);
+        }
+        else if (payload.equals("beat"))
+        {
+            // play the sound in loop every 1 sec
+            controller.playSound("/sounds/beat1.wav");
+            new ParticipantCountdownTimer(this, "beat", 1000);
+        }
+        else if (payload.equals("reset"))
+        {
+            this.setInvulnerability();
         }
     }
 }
