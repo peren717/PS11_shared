@@ -4,7 +4,12 @@ import static asteroids.game.Constants.*;
 import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Random;
 import javax.sound.sampled.AudioSystem;
@@ -49,6 +54,8 @@ public class Controller implements KeyListener, ActionListener, MouseListener
 
     /** Current Score */
     private int score;
+    
+    private int highScore;
 
     /** Boolean that indicates ship movement */
     private boolean forward;
@@ -100,6 +107,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
+        highScore();
 
         // Sets the version
         this.version = version;
@@ -128,6 +136,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             // place stars as background
             placeStars();
+            highScore();
         }
     }
 
@@ -414,6 +423,7 @@ public class Controller implements KeyListener, ActionListener, MouseListener
             if (lives <= 0)
             {
                 finalScreen();
+                highScore();
             }
             else if (pstate.countAsteroids() == 0 && pstate.countAlienShip() == 0)
             {
@@ -681,6 +691,39 @@ public class Controller implements KeyListener, ActionListener, MouseListener
         {
             score = score + 1000;
             display.setScore(score);
+        }
+    }
+    
+    private void highScore()
+    {
+        File file =  new File("highScore.txt");
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            try
+            {
+                String highScoreStr = br.readLine();                
+                highScore = Integer.parseInt(highScoreStr);
+                display.setHighScore(highScore);
+                if (score > highScore)
+                {
+                    highScore = score;
+                    display.setHighScore(highScore);
+                    PrintWriter pw = new PrintWriter(file);
+                    pw.print(Integer.toString(highScore));
+                    pw.close();
+                }
+                
+            }
+            catch (IOException e)
+            {               
+                e.printStackTrace();
+            }
+            
+        }
+        catch (FileNotFoundException e)
+        {            
+            e.printStackTrace();
         }
     }
 }

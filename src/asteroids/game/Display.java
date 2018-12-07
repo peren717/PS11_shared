@@ -91,4 +91,12 @@ public class Display extends JFrame
     {
         screen.setScore(score);
     }
+    
+    /*
+     * Sets the high Score
+     */
+    public void setHighScore(int highScore)
+    {
+        screen.setHighScore(highScore);
+    }
 }

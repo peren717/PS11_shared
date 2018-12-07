@@ -30,6 +30,9 @@ public class Screen extends JPanel
     /** A shape used to draw lives */
     private Ship liveShape;
 
+    /** Highest Score */
+    private int highScore;
+
     /**
      * Creates an empty screen
      */
@@ -72,6 +75,12 @@ public class Screen extends JPanel
     public void setScore (int score)
     {
         this.score = score;
+    }
+
+    /** Set the highest score */
+    public void setHighScore (int highScore)
+    {
+        this.highScore = highScore;
     }
 
     /**
@@ -130,6 +139,12 @@ public class Screen extends JPanel
         {
             g.setFont(new Font("SansSerif", 0, 15));
             g.drawString("Press M to enable mouse control", SIZE - 240, SIZE - 20);
+        }
+        
+        if (controller.getVersion()==1)
+        {
+            g.setFont(new Font("SansSerif", 0, 15));
+            g.drawString("Highest Score: "+highScore, 0, SIZE-20);
         }
 
     }
